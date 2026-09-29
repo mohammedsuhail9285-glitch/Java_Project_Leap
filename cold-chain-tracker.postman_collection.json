@@ -1,0 +1,414 @@
+{
+  "info": {
+    "_postman_id": "cold-chain-tracker-api-collection",
+    "name": "Cold-Chain Logistics & Temperature Compliance Tracker API",
+    "description": "Production-grade automated cold-chain logistics API with IoT temperature monitoring, rule violation detection (2°C - 8°C), and alert dispatch.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "jwtToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login as Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('jwtToken', jsonData.token);",
+                  "    console.log('JWT Token stored successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usernameOrEmail\": \"admin\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login as Operator",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usernameOrEmail\": \"operator\",\n  \"password\": \"Operator@123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Register New User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"sarah_ops\",\n  \"email\": \"sarah@coldchain.com\",\n  \"password\": \"Sarah@123\",\n  \"fullName\": \"Sarah Connor\",\n  \"role\": \"OPERATOR\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Vehicles",
+      "item": [
+        {
+          "name": "List All Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/vehicles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "vehicles"]
+            }
+          }
+        },
+        {
+          "name": "Create Vehicle (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicleNumber\": \"DL-01-CR-5544\",\n  \"driverName\": \"Vikram Singh\",\n  \"driverContact\": \"+91-9811002233\",\n  \"model\": \"Tata Ace Gold Reefer Chiller\",\n  \"capacityKg\": 2000.0,\n  \"status\": \"AVAILABLE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/vehicles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "vehicles"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Shipments",
+      "item": [
+        {
+          "name": "Create Shipment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"Insulin Glargine (2,000 Cartridges)\",\n  \"productCategory\": \"MEDICINE\",\n  \"origin\": \"Biocon Park, Bengaluru\",\n  \"destination\": \"KIMS Hospital, Hyderabad\",\n  \"vehicleId\": 2,\n  \"minTempThreshold\": 2.0,\n  \"maxTempThreshold\": 8.0,\n  \"departureTime\": \"2026-09-28T09:00:00\",\n  \"estimatedArrivalTime\": \"2026-09-28T22:00:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/shipments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "shipments"]
+            }
+          }
+        },
+        {
+          "name": "List Shipments (Paginated & Sorted)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/shipments?page=0&size=10&sortBy=createdAt&sortDir=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "shipments"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" },
+                { "key": "sortBy", "value": "createdAt" },
+                { "key": "sortDir", "value": "desc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Shipment by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/shipments/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "shipments", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Shipment Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"DELIVERED\",\n  \"remarks\": \"Shipment successfully delivered at destination receiving dock.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/shipments/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "shipments", "1", "status"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Temperature Monitoring & Telemetry",
+      "item": [
+        {
+          "name": "Log Compliant Temperature (Safe: 4.8°C)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"temperature\": 4.8,\n  \"humidity\": 62.0,\n  \"locationCoordinates\": \"17.412345, 78.432156\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/temperature-logs/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "temperature-logs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Log VIOLATION Temperature (Breach: 10.5°C)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"temperature\": 10.5,\n  \"humidity\": 78.5,\n  \"locationCoordinates\": \"16.512345, 76.432156\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/temperature-logs/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "temperature-logs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Telemetry Logs for Shipment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/temperature-logs/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "temperature-logs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Latest Telemetry Reading",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/temperature-logs/1/latest",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "temperature-logs", "1", "latest"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Alerts System",
+      "item": [
+        {
+          "name": "Get Alerts for Shipment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/alerts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "alerts", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get All System Alerts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/alerts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "alerts"]
+            }
+          }
+        },
+        {
+          "name": "Resolve Alert (ADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwtToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/alerts/1/resolve?notes=Auxiliary chiller compressor activated. Temperature restored to 4.2°C.",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "alerts", "1", "resolve"],
+              "query": [
+                {
+                  "key": "notes",
+                  "value": "Auxiliary chiller compressor activated. Temperature restored to 4.2°C."
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Dashboard Summary",
+      "item": [
+        {
+          "name": "Get Cold-Chain Dashboard KPIs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "summary"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

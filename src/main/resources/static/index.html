@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColdChain Pro — Temperature Compliance & Fleet Logistics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-base: #0a0f1d;
+            --bg-card: rgba(16, 24, 45, 0.75);
+            --bg-card-hover: rgba(22, 34, 64, 0.85);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-focus: #00d2ff;
+            --primary: #00d2ff;
+            --primary-glow: rgba(0, 210, 255, 0.35);
+            --accent-cyan: #00f0ff;
+            --accent-safe: #10b981;
+            --accent-safe-glow: rgba(16, 185, 129, 0.3);
+            --accent-warn: #f59e0b;
+            --accent-danger: #ef4444;
+            --accent-danger-glow: rgba(239, 68, 68, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 210, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.06) 0%, transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* HEADER / NAVBAR */
+        header {
+            background: rgba(10, 15, 29, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: #fff;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .brand-text h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #fff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text span {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-safe);
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-safe);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-safe);
+            animation: pulse-live 1.8s infinite;
+        }
+
+        @keyframes pulse-live {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--border-glass);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d2ff 0%, #0072ff 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 22px rgba(0, 210, 255, 0.5);
+            transform: translateY(-1.5px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-danger-glow);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+            transform: translateY(-1.5px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-safe-glow);
+        }
+
+        /* MAIN WRAPPER */
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* HERO STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 1.35rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .stat-val {
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .stat-desc {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-top: 0.4rem;
+        }
+
+        /* TEMPERATURE COMPLIANCE HERO PANEL */
+        .telemetry-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .telemetry-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .gauge-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .gauge-display {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.5rem 0;
+        }
+
+        .thermometer-visual {
+            width: 38px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px 20px 24px 24px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 6px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .mercury-stem {
+            width: 14px;
+            height: 60%;
+            background: linear-gradient(to top, #10b981, #00d2ff);
+            border-radius: 8px 8px 0 0;
+            transition: height 0.6s ease, background 0.6s ease;
+        }
+
+        .mercury-bulb {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 14px #10b981;
+            transition: all 0.6s ease;
+        }
+
+        .gauge-readout {
+            flex: 1;
+        }
+
+        .temp-huge {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            letter-spacing: -2px;
+            display: flex;
+            align-items: baseline;
+            gap: 0.3rem;
+        }
+
+        .temp-unit {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .safe-window-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .simulator-box {
+            background: rgba(10, 15, 29, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sim-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .sim-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sim-btn {
+            padding: 0.75rem 0.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-glass);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            text-align: center;
+        }
+
+        .sim-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .sim-btn-safe {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+        .sim-btn-safe:hover { background: rgba(16, 185, 129, 0.22); }
+
+        .sim-btn-breach-high {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+        .sim-btn-breach-high:hover { background: rgba(239, 68, 68, 0.22); }
+
+        .sim-btn-breach-low {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+        .sim-btn-breach-low:hover { background: rgba(59, 130, 246, 0.22); }
+
+        /* DATA TABLES */
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.5px;
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.28rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-transit { background: rgba(0, 210, 255, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .badge-delivered { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.35); }
+        .badge-warn { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.35); }
+
+        /* TOAST NOTIFICATIONS */
+        #toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background: rgba(16, 24, 45, 0.95);
+            backdrop-filter: blur(12px);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            max-width: 380px;
+            animation: slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border-top: 1px solid var(--border-glass);
+            border-right: 1px solid var(--border-glass);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .toast-danger { border-left-color: var(--accent-danger); }
+        .toast-success { border-left-color: var(--accent-safe); }
+
+        @keyframes slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* CODE MONO */
+        .font-mono {
+            font-family: var(--font-mono);
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            margin-top: 3rem;
+            background: rgba(10, 15, 29, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <a href="/" class="brand">
+            <div class="brand-logo">
+                <i class="fa-solid fa-snowflake"></i>
+            </div>
+            <div class="brand-text">
+                <h1>ColdChain Pro</h1>
+                <span>Logistics & Compliance Tracker</span>
+            </div>
+        </a>
+
+        <div class="nav-actions">
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                LIVE TELEMETRY
+            </div>
+            <a href="/swagger-ui/index.html" class="btn btn-outline" target="_blank">
+                <i class="fa-solid fa-book-open"></i> Swagger API Docs
+            </a>
+            <button class="btn btn-primary" onclick="refreshDashboard()">
+                <i class="fa-solid fa-rotate-right"></i> Sync Data
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <main>
+
+        <!-- KPI SUMMARY METRICS -->
+        <section class="stats-grid">
+            <div class="glass-card">
+                <div class="stat-header">
+                    <span class="stat-title">Active Consignments</span>
+                    <div class="stat-icon" style="background: rgba(0, 210, 255, 0.12); color: #38bdf8;">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                </div>
+                <div class="stat-val" id="stat-active">--</div>
+                <div class="stat-desc" id="stat-total-shipments">Total Shipments: --</div>
+            </div>
+
+            <div class="glass-card">
+                <div class="stat-header">
+                    <span class="stat-title">Compliance Rate</span>
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.12); color: #34d399;">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                </div>
+                <div class="stat-val" style="color: #34d399;" id="stat-compliance">--%</div>
+                <div class="stat-desc">Safe 2°C to 8°C Window</div>
+            </div>
+
+            <div class="glass-card">
+                <div class="stat-header">
+                    <span class="stat-title">Breach Violations</span>
+                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.12); color: #f87171;">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                </div>
+                <div class="stat-val" style="color: #f87171;" id="stat-violations">--</div>
+                <div class="stat-desc" id="stat-unresolved">Unresolved Incidents: --</div>
+            </div>
+
+            <div class="glass-card">
+                <div class="stat-header">
+                    <span class="stat-title">Reefer Fleet</span>
+                    <div class="stat-icon" style="background: rgba(168, 85, 247, 0.12); color: #c084fc;">
+                        <i class="fa-solid fa-van-shuttle"></i>
+                    </div>
+                </div>
+                <div class="stat-val" id="stat-vehicles">--</div>
+                <div class="stat-desc" id="stat-available-vehicles">Available Units: --</div>
+            </div>
+        </section>
+
+        <!-- LIVE TELEMETRY & SIMULATOR HERO -->
+        <section class="telemetry-hero">
+            <div class="glass-card gauge-panel">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-temperature-arrow-up" style="color: #00d2ff;"></i> Live In-Transit Telemetry</h2>
+                    <span class="badge badge-transit" id="monitored-shipment-tag">SHIPMENT #1</span>
+                </div>
+
+                <div class="gauge-display">
+                    <div class="thermometer-visual">
+                        <div class="mercury-stem" id="mercury-stem"></div>
+                        <div class="mercury-bulb" id="mercury-bulb"></div>
+                    </div>
+                    <div class="gauge-readout">
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Current Reefer Temperature</span>
+                        <div class="temp-huge">
+                            <span id="current-temp-val">--</span>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                        <div class="safe-window-pill">
+                            <i class="fa-solid fa-circle-check"></i> Standard Safe Window: 2.0°C to 8.0°C
+                        </div>
+                        <div style="margin-top: 0.85rem; font-size: 0.78rem; color: var(--text-dim);">
+                            <span id="last-telemetry-time">Last Reading: Synchronizing...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-glass); padding-top: 0.85rem;">
+                    Product: <strong style="color: #fff;" id="monitored-product">Pfizer-BioNTech mRNA COVID-19 Vaccine</strong><br>
+                    Carrier: <span id="monitored-driver">KA-01-EQ-1001 (Ramesh Babu)</span>
+                </div>
+            </div>
+
+            <!-- SIMULATOR CONTROL PANEL -->
+            <div class="glass-card">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-satellite-dish" style="color: #38bdf8;"></i> IoT Telematics Sensor Simulation</h2>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Real-time Telemetry Ingestion</span>
+                </div>
+
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Simulate real IoT sensor data sent from vehicle reefer units. If readings fall outside <strong style="color: #34d399;">2.0°C – 8.0°C</strong>, the backend will <em>automatically create an alert</em> and recalculate compliance!
+                </p>
+
+                <div class="simulator-box">
+                    <div class="sim-buttons">
+                        <button class="sim-btn sim-btn-safe" onclick="sendTelemetry(4.8, 'Safe In-Transit Temperature')">
+                            <i class="fa-solid fa-check" style="font-size: 1.1rem;"></i>
+                            <span>Simulate 4.8°C</span>
+                            <span style="font-size: 0.65rem; opacity: 0.8;">Normal Range</span>
+                        </button>
+                        <button class="sim-btn sim-btn-breach-high" onclick="sendTelemetry(10.5, 'High Heat Violation Triggered!')">
+                            <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.1rem;"></i>
+                            <span>Simulate 10.5°C</span>
+                            <span style="font-size: 0.65rem; opacity: 0.8;">Upper Breach Alert</span>
+                        </button>
+                        <button class="sim-btn sim-btn-breach-low" onclick="sendTelemetry(0.8, 'Freezing Violation Triggered!')">
+                            <i class="fa-solid fa-icicles" style="font-size: 1.1rem;"></i>
+                            <span>Simulate 0.8°C</span>
+                            <span style="font-size: 0.65rem; opacity: 0.8;">Sub-Zero Breach Alert</span>
+                        </button>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 0.75rem;">
+                        <input type="number" step="0.1" id="custom-temp-input" placeholder="Custom °C (e.g. 6.2)" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: #fff; padding: 0.6rem 0.8rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.85rem;">
+                        <button class="btn btn-outline" onclick="sendCustomTelemetry()">
+                            <i class="fa-solid fa-paper-plane"></i> Send Sensor Log
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INCIDENTS & ALERTS -->
+        <section class="glass-card" style="margin-bottom: 2rem;">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-bell" style="color: #ef4444;"></i> Recent Automated Compliance Breach Alerts</h2>
+                <span class="badge badge-danger" id="active-alert-counter">2 ACTIVE INCIDENTS</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Alert ID</th>
+                            <th>Shipment</th>
+                            <th>Breach Type</th>
+                            <th>Recorded Temp</th>
+                            <th>Severity</th>
+                            <th>Timestamp</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alerts-table-body">
+                        <tr><td colspan="8" style="text-align: center; color: var(--text-dim);">Loading alerts...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SHIPMENTS IN TRANSIT -->
+        <section class="glass-card">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-boxes-packing" style="color: #38bdf8;"></i> Cold-Chain Consignments Directory</h2>
+                <a href="/swagger-ui/index.html#/4.%20Shipment%20Module" target="_blank" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;">
+                    <i class="fa-solid fa-plus"></i> Dispatch via API
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tracking No</th>
+                            <th>Product Name</th>
+                            <th>Origin → Destination</th>
+                            <th>Vehicle / Driver</th>
+                            <th>Safe Range</th>
+                            <th>Current Temp</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipments-table-body">
+                        <tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Loading shipments...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container"></div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Automated Cold-Chain Logistics & Temperature Compliance Tracker &bull; Powered by Spring Boot 3 &amp; MySQL</p>
+        <p style="margin-top: 0.35rem; font-size: 0.72rem;">Safe Temperature Range Enforced: 2.0°C to 8.0°C | Sub-Zero &amp; Thermal Spike Automated Alerting</p>
+    </footer>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        let cachedToken = null;
+
+        // Auto-authenticate with seeded admin on startup to power simulation buttons
+        async function getAuthToken() {
+            if (cachedToken) return cachedToken;
+            try {
+                const res = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        usernameOrEmail: 'admin',
+                        password: 'Admin@123'
+                    })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    cachedToken = data.token;
+                    return cachedToken;
+                }
+            } catch (err) {
+                console.error("Auth error:", err);
+            }
+            return null;
+        }
+
+        async function refreshDashboard() {
+            try {
+                const res = await fetch('/dashboard/summary');
+                if (!res.ok) throw new Error("Dashboard fetch failed");
+                const data = await res.json();
+                renderDashboard(data);
+            } catch (e) {
+                console.error("Error refreshing dashboard:", e);
+                showToast("Connection to Cold-Chain backend failed", "danger");
+            }
+        }
+
+        function renderDashboard(data) {
+            // Stats
+            document.getElementById('stat-active').textContent = data.activeShipments || 0;
+            document.getElementById('stat-total-shipments').textContent = `Total Shipments: ${data.totalShipments || 0}`;
+            document.getElementById('stat-compliance').textContent = `${data.safeCompliancePercentage || 100}%`;
+            document.getElementById('stat-violations').textContent = data.violationsCount || 0;
+            document.getElementById('stat-unresolved').textContent = `Unresolved: ${data.unresolvedAlertsCount || 0}`;
+            document.getElementById('stat-vehicles').textContent = data.totalVehicles || 0;
+            document.getElementById('stat-available-vehicles').textContent = `Available: ${data.availableVehicles || 0}`;
+
+            document.getElementById('active-alert-counter').textContent = `${data.unresolvedAlertsCount || 0} ACTIVE INCIDENTS`;
+
+            // Shipments & Telemetry
+            if (data.recentShipments && data.recentShipments.length > 0) {
+                const first = data.recentShipments[0];
+                document.getElementById('monitored-shipment-tag').textContent = first.trackingNumber;
+                document.getElementById('monitored-product').textContent = first.productName;
+                if (first.vehicle) {
+                    document.getElementById('monitored-driver').textContent = `${first.vehicle.vehicleNumber} (${first.vehicle.driverName})`;
+                }
+
+                if (first.latestTemperature != null) {
+                    const temp = first.latestTemperature;
+                    document.getElementById('current-temp-val').textContent = temp.toFixed(1);
+                    updateThermometer(temp);
+                } else {
+                    document.getElementById('current-temp-val').textContent = '--';
+                }
+
+                if (first.latestLogTime) {
+                    const d = new Date(first.latestLogTime);
+                    document.getElementById('last-telemetry-time').textContent = `Last Reading: ${d.toLocaleTimeString()}`;
+                }
+
+                renderShipmentsTable(data.recentShipments);
+            }
+
+            // Alerts
+            if (data.recentAlerts) {
+                renderAlertsTable(data.recentAlerts);
+            }
+        }
+
+        function updateThermometer(temp) {
+            const stem = document.getElementById('mercury-stem');
+            const bulb = document.getElementById('mercury-bulb');
+            const readout = document.getElementById('current-temp-val');
+
+            // Scale between 0°C and 15°C (10% to 90%)
+            let percent = ((temp - 0) / (15 - 0)) * 100;
+            percent = Math.max(10, Math.min(95, percent));
+            stem.style.height = `${percent}%`;
+
+            if (temp < 2.0) {
+                // Too Cold
+                stem.style.background = 'linear-gradient(to top, #3b82f6, #60a5fa)';
+                bulb.style.background = '#3b82f6';
+                bulb.style.boxShadow = '0 0 16px #3b82f6';
+                readout.style.color = '#60a5fa';
+            } else if (temp > 8.0) {
+                // Too Hot
+                stem.style.background = 'linear-gradient(to top, #ef4444, #f87171)';
+                bulb.style.background = '#ef4444';
+                bulb.style.boxShadow = '0 0 18px #ef4444';
+                readout.style.color = '#f87171';
+            } else {
+                // Safe compliant
+                stem.style.background = 'linear-gradient(to top, #10b981, #00d2ff)';
+                bulb.style.background = '#10b981';
+                bulb.style.boxShadow = '0 0 16px #10b981';
+                readout.style.color = '#34d399';
+            }
+        }
+
+        function renderShipmentsTable(shipments) {
+            const tbody = document.getElementById('shipments-table-body');
+            tbody.innerHTML = '';
+            shipments.forEach(s => {
+                const tr = document.createElement('tr');
+                const v = s.vehicle || { vehicleNumber: 'N/A', driverName: 'N/A' };
+                const tempClass = (s.latestTemperature != null && (s.latestTemperature < 2 || s.latestTemperature > 8)) 
+                    ? 'color: #f87171; font-weight: 700;' 
+                    : 'color: #34d399; font-weight: 700;';
+
+                tr.innerHTML = `
+                    <td class="font-mono" style="color: #00d2ff;">${s.trackingNumber}</td>
+                    <td><strong>${s.productName}</strong><br><span style="font-size: 0.72rem; color: var(--text-dim);">${s.productCategory || 'PHARMA'}</span></td>
+                    <td>${s.origin} <i class="fa-solid fa-arrow-right" style="font-size: 0.7rem; color: var(--text-dim); margin: 0 4px;"></i> ${s.destination}</td>
+                    <td><i class="fa-solid fa-truck" style="color: var(--text-dim);"></i> ${v.vehicleNumber}<br><span style="font-size: 0.72rem; color: var(--text-muted);">${v.driverName}</span></td>
+                    <td class="font-mono">${s.minTempThreshold}°C – ${s.maxTempThreshold}°C</td>
+                    <td class="font-mono" style="${tempClass}">${s.latestTemperature != null ? s.latestTemperature.toFixed(1) + '°C' : 'N/A'}</td>
+                    <td><span class="badge ${s.status === 'IN_TRANSIT' ? 'badge-transit' : 'badge-delivered'}">${s.status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderAlertsTable(alerts) {
+            const tbody = document.getElementById('alerts-table-body');
+            tbody.innerHTML = '';
+
+            if (alerts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-dim); padding: 1.5rem;">No compliance breach alerts logged. System is optimal.</td></tr>';
+                return;
+            }
+
+            alerts.forEach(a => {
+                const tr = document.createElement('tr');
+                const dateStr = a.createdAt ? new Date(a.createdAt).toLocaleString() : 'Just now';
+                const isResolved = a.resolved;
+                const statusBadge = isResolved 
+                    ? '<span class="badge badge-delivered"><i class="fa-solid fa-check"></i> RESOLVED</span>'
+                    : '<span class="badge badge-danger"><i class="fa-solid fa-circle-exclamation"></i> UNRESOLVED</span>';
+
+                const resolveBtn = isResolved 
+                    ? `<span style="font-size: 0.75rem; color: var(--text-dim);">by ${a.resolvedBy || 'Admin'}</span>`
+                    : `<button class="btn btn-outline" style="padding: 0.3rem 0.65rem; font-size: 0.75rem;" onclick="resolveAlert(${a.id})"><i class="fa-solid fa-check-double"></i> Resolve</button>`;
+
+                tr.innerHTML = `
+                    <td class="font-mono">#ALT-${a.id}</td>
+                    <td><strong style="color: #fff;">${a.productName}</strong><br><span class="font-mono" style="font-size: 0.72rem; color: var(--text-dim);">${a.trackingNumber}</span></td>
+                    <td><span class="badge ${a.breachType === 'UPPER_LIMIT_EXCEEDED' ? 'badge-danger' : 'badge-warn'}">${a.breachType}</span></td>
+                    <td class="font-mono" style="color: #f87171; font-weight: 700; font-size: 1rem;">${a.recordedTemperature}°C</td>
+                    <td><span class="badge ${a.severity === 'CRITICAL' ? 'badge-danger' : 'badge-warn'}">${a.severity}</span></td>
+                    <td style="font-size: 0.75rem; color: var(--text-muted);">${dateStr}</td>
+                    <td>${statusBadge}</td>
+                    <td>${resolveBtn}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function sendTelemetry(temp, notice) {
+            const token = await getAuthToken();
+            if (!token) {
+                showToast("Authentication required to simulate telemetry.", "danger");
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/v1/temperature-logs/1', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        temperature: temp,
+                        humidity: 65.0,
+                        locationCoordinates: "15.364708, 75.123955"
+                    })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.violation) {
+                        showToast(`🚨 ${notice} (Logged: ${temp}°C) - AUTOMATED ALERT TRIGGERED!`, "danger");
+                    } else {
+                        showToast(`✅ ${notice} (Logged: ${temp}°C) - Compliant reading!`, "success");
+                    }
+                    refreshDashboard();
+                } else {
+                    const err = await res.json();
+                    showToast(`Error: ${err.message}`, "danger");
+                }
+            } catch (e) {
+                console.error(e);
+                showToast("Failed to transmit telemetry", "danger");
+            }
+        }
+
+        function sendCustomTelemetry() {
+            const input = document.getElementById('custom-temp-input');
+            const val = parseFloat(input.value);
+            if (isNaN(val)) {
+                showToast("Please enter a valid temperature number", "warn");
+                return;
+            }
+            sendTelemetry(val, `Custom Telemetry Logged`);
+            input.value = '';
+        }
+
+        async function resolveAlert(alertId) {
+            const token = await getAuthToken();
+            if (!token) {
+                showToast("Admin authentication required.", "danger");
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/v1/alerts/${alertId}/resolve?notes=Operator+adjusted+chiller+cooling+compressor`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (res.ok) {
+                    showToast(`Alert #ALT-${alertId} marked as Resolved!`, "success");
+                    refreshDashboard();
+                } else {
+                    showToast(`Could not resolve alert`, "danger");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icon = type === 'danger' ? 'fa-triangle-exclamation' : (type === 'success' ? 'fa-circle-check' : 'fa-info-circle');
+            toast.innerHTML = `
+                <i class="fa-solid ${icon}" style="margin-top: 2px;"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 2px;">Cold-Chain Alert</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">${message}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 4500);
+        }
+
+        // Initialize dashboard
+        refreshDashboard();
+        setInterval(refreshDashboard, 15000); // Polling every 15s
+    </script>
+</body>
+</html>
